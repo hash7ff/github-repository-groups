@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Repository Groups for GitHub — Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main>
+    <h1>Repository Groups for GitHub</h1>
+    <p class="muted">Shows your repositories on <code>github.com/&lt;you&gt;?tab=repositories</code> in collapsible groups.
+      The groups are stored in this browser; nothing is ever written to GitHub.</p>
+
+    <section>
+      <h2>GitHub account</h2>
+      <p id="status" class="status">Checking…</p>
+
+      <div id="signedOut" hidden>
+        <p>Connect the <strong>Repository Groups</strong> GitHub App. You will get a short code to enter on GitHub; no token to create or paste.</p>
+        <p class="muted">Why an app? GitHub only lets an app list your <em>private</em> repositories after you install it on them.
+          The app asks for <strong>read-only access to repository metadata</strong> (names, descriptions, languages) and nothing else:
+          it cannot read your code and cannot change anything on GitHub.</p>
+        <button id="signIn" type="button">Sign in with GitHub</button>
+      </div>
+
+      <div id="flow" class="card" hidden>
+        <p><strong>1.</strong> Your code: <code id="userCode" class="user-code"></code> <button id="copyCode" type="button" class="secondary small">Copy</button></p>
+        <p><strong>2.</strong> <a id="openGitHub" href="https://github.com/login/device" target="_blank" rel="noreferrer">Open github.com/login/device</a> and enter the code, then approve <em>Repository Groups</em>.</p>
+        <p id="flowStatus" class="muted">Waiting for you to approve on GitHub…</p>
+        <button id="cancelFlow" type="button" class="secondary small">Cancel</button>
+      </div>
+
+      <div id="signedIn" hidden>
+        <p id="installStatus" class="muted"></p>
+        <div id="installHint" class="card" hidden>
+          <p>The app is not installed on your repositories yet, so it cannot list them. Install it (choose <em>All repositories</em>, or only the ones you want to organise), then come back and click Refresh.
+            The app only reads repository metadata; it cannot read code or change anything.</p>
+          <a id="installLink" class="button-link" href="https://github.com/apps/repository-groups/installations/new" target="_blank" rel="noreferrer">Install on your repositories</a>
+          <button id="recheck" type="button" class="secondary">Refresh</button>
+        </div>
+        <button id="signOut" type="button" class="secondary">Sign out</button>
+      </div>
+      <p id="result" class="result" hidden></p>
+    </section>
+
+    <section>
+      <h2>Your groups</h2>
+      <p id="usage" class="muted">Checking…</p>
+      <p class="muted">Groups live in Chrome's sync storage for this extension. With Chrome sync turned on they follow you to other computers
+        signed in to the same Google account; with sync off they stay in this browser only. Export a copy as a backup or to move to another browser.</p>
+      <div class="row">
+        <button id="exportGroups" type="button" class="secondary">Export groups</button>
+        <button id="importGroups" type="button" class="secondary">Import groups…</button>
+        <input id="importFile" type="file" accept="application/json,.json" hidden>
+      </div>
+      <div class="row">
+        <button id="clearGroups" type="button" class="secondary">Delete all groups…</button>
+      </div>
+      <div id="clearConfirm" class="card" hidden>
+        <p>Delete every group in this browser, and in Chrome sync on your other computers? Your repositories are not touched.
+          Export first if you may want them back.</p>
+        <button id="clearApply" type="button" class="danger">Delete all groups</button>
+        <button id="clearCancel" type="button" class="secondary">Cancel</button>
+      </div>
+      <div id="importConfirm" class="card" hidden>
+        <p id="importSummary"></p>
+        <button id="importApply" type="button">Replace with the file's groups</button>
+        <button id="importCancel" type="button" class="secondary">Cancel</button>
+      </div>
+      <p id="groupsResult" class="result" hidden></p>
+    </section>
+
+    <section>
+      <h2>Advanced</h2>
+      <details>
+        <summary>Use a personal access token instead of signing in</summary>
+        <p class="muted">For people who prefer a token. A fine-grained token with <strong>Metadata: Read-only</strong> is enough; do not add other permissions
+          (<a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noreferrer">create one</a>). Saving a token replaces the GitHub sign-in.</p>
+        <div class="row">
+          <input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+          <button id="save" type="button" class="secondary">Save &amp; test token</button>
+        </div>
+        <p id="tokenResult" class="result" hidden></p>
+      </details>
+    </section>
+
+    <section>
+      <h2>Stop using the extension</h2>
+      <p class="muted">Nothing is left behind if you do all four. Each step is independent.</p>
+      <ol>
+        <li><strong>Delete your groups</strong> with “Delete all groups…” above (this also clears them from Chrome sync).</li>
+        <li><strong>Sign out</strong> above: the GitHub credential is removed from this browser.</li>
+        <li><strong>Remove the app's access on GitHub</strong>: GitHub → Settings → Applications → <em>Installed GitHub Apps</em> → Repository Groups → Configure → Uninstall,
+          and <em>Authorized GitHub Apps</em> → Repository Groups → Revoke. For an organization, its owner uninstalls it under the organization's Settings → GitHub Apps.</li>
+        <li><strong>Remove the extension</strong> from <code>chrome://extensions</code>.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Privacy</h2>
+      <ul>
+        <li><strong>Nothing is written to GitHub.</strong> The extension only reads your repository list.</li>
+        <li>Your groups (group names and which repository ids are in them) are kept in Chrome's storage for this extension. They are never sent to us.
+          With Chrome sync on, Google keeps them as part of your Chrome sync data, like bookmarks.</li>
+        <li>Your GitHub credential is stored in this browser profile (<code>chrome.storage.local</code>) and is sent only to GitHub. It is never given to the GitHub web page or written to logs.</li>
+      </ul>
+    </section>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+/* Only Primer CSS variables so the UI follows GitHub's light/dark theme (variable names verified 2026-09-03). */
+.gtf-root { margin: 0 0 16px; color: var(--fgColor-default); font-size: 14px; }
+
+/* toolbar */
+.gtf-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0; }
+.gtf-segmented { display: inline-flex; border: 1px solid var(--borderColor-default); border-radius: 6px; overflow: hidden; }
+.gtf-seg-btn { font: inherit; font-size: 12px; font-weight: 500; padding: 4px 10px; border: 0; background: var(--bgColor-default); color: var(--fgColor-muted); cursor: pointer; }
+.gtf-seg-btn + .gtf-seg-btn { border-left: 1px solid var(--borderColor-default); }
+.gtf-seg-btn[aria-pressed="true"] { background: var(--bgColor-neutral-muted); color: var(--fgColor-default); font-weight: 600; }
+.gtf-search { flex: 1 1 200px; min-width: 160px; font: inherit; font-size: 14px; padding: 4px 10px; border: 1px solid var(--borderColor-default); border-radius: 6px; background: var(--bgColor-default); color: var(--fgColor-default); }
+.gtf-search:focus { outline: 2px solid var(--fgColor-accent); outline-offset: -1px; }
+.gtf-toolbar-status { color: var(--fgColor-muted); font-size: 12px; margin-left: auto; }
+.gtf-btn { font: inherit; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--borderColor-default); background: var(--button-default-bgColor-rest, var(--bgColor-default)); color: var(--fgColor-default); cursor: pointer; }
+.gtf-btn:hover { background: var(--bgColor-neutral-muted); }
+a.gtf-btn { text-decoration: none; display: inline-block; }
+
+/* groups */
+.gtf-group { border: 1px solid var(--borderColor-default); border-radius: 6px; margin-bottom: 12px; overflow: hidden; }
+.gtf-group-head { display: flex; align-items: center; background: var(--bgColor-muted); }
+.gtf-group-head .gtf-group-header { flex: 1; }
+.gtf-group-menu { margin-right: 8px; padding: 2px 8px; font-weight: 700; }
+.gtf-group-header { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; font: inherit; font-size: 14px; font-weight: 600; padding: 8px 12px; border: 0; background: var(--bgColor-muted); color: var(--fgColor-default); cursor: pointer; }
+.gtf-group-header-static { cursor: default; }
+.gtf-group-header:not(.gtf-group-header-static):hover { background: var(--bgColor-neutral-muted); }
+.gtf-caret { display: inline-block; width: 12px; color: var(--fgColor-muted); font-size: 12px; }
+.gtf-caret::before { content: "▾"; }
+.gtf-group-header[aria-expanded="false"] .gtf-caret::before { content: "▸"; }
+.gtf-count { font-size: 12px; font-weight: 500; padding: 0 7px; border-radius: 2em; background: var(--bgColor-neutral-muted); color: var(--fgColor-muted); }
+.gtf-ungrouped .gtf-group-name { color: var(--fgColor-muted); }
+.gtf-conflicts { border-color: var(--fgColor-attention); }
+.gtf-conflicts .gtf-group-name { color: var(--fgColor-attention); }
+.gtf-conflict-note { color: var(--fgColor-attention); font-size: 12px; }
+
+/* repository rows */
+.gtf-repos { list-style: none; margin: 0; padding: 0; }
+.gtf-repo { display: flex; justify-content: space-between; gap: 12px; padding: 12px; border-top: 1px solid var(--borderColor-muted); }
+.gtf-repo-main { min-width: 0; }
+.gtf-repo-title { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.gtf-repo-name { font-weight: 600; font-size: 15px; color: var(--fgColor-accent); text-decoration: none; }
+.gtf-repo-name:hover { text-decoration: underline; }
+.gtf-label { font-size: 11px; font-weight: 500; line-height: 16px; padding: 0 6px; border: 1px solid var(--borderColor-default); border-radius: 2em; color: var(--fgColor-muted); }
+.gtf-label-attention { color: var(--fgColor-attention); border-color: var(--fgColor-attention); }
+.gtf-repo-desc { margin: 4px 0 0; color: var(--fgColor-muted); font-size: 13px; }
+.gtf-repo-meta { display: flex; gap: 12px; margin-top: 6px; color: var(--fgColor-muted); font-size: 12px; }
+.gtf-repo-actions { flex: 0 0 auto; display: flex; align-items: flex-start; }
+
+/* states */
+.gtf-loading, .gtf-empty { color: var(--fgColor-muted); padding: 8px 0; }
+.gtf-error { color: var(--fgColor-danger); }
+.gtf-error-panel, .gtf-notice { border: 1px solid var(--borderColor-default); border-radius: 6px; padding: 12px; background: var(--bgColor-muted); }
+.gtf-error-panel { border-color: var(--fgColor-danger); }
+.gtf-error-panel p { margin: 0 0 8px; }
+.gtf-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* flash messages */
+.gtf-flash { display: flex; align-items: center; gap: 8px; border: 1px solid var(--borderColor-default); border-radius: 6px; padding: 8px 12px; margin: 0 0 12px; background: var(--bgColor-muted); }
+.gtf-flash-ok { border-color: var(--borderColor-success-emphasis, #1f883d); }
+.gtf-flash-error { border-color: var(--fgColor-danger); color: var(--fgColor-danger); }
+.gtf-flash-close { margin-left: auto; }
+
+/* dialogs */
+.gtf-dialog { border: 1px solid var(--borderColor-default); border-radius: 12px; padding: 0; width: min(440px, 92vw); color: var(--fgColor-default); background: var(--bgColor-default); font-size: 14px; box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+.gtf-dialog-wide { width: min(560px, 92vw); }
+.gtf-dialog::backdrop { background: rgba(0, 0, 0, .5); }
+.gtf-dialog-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--borderColor-default); }
+.gtf-dialog-title { margin: 0; font-size: 14px; font-weight: 600; }
+.gtf-dialog-body { padding: 12px 16px 16px; }
+.gtf-dialog-foot { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.gtf-spacer { flex: 1; }
+.gtf-btn-primary { background: #1f883d; border-color: #1f883d; color: #fff; }
+.gtf-btn-primary:hover { background: #1a7f37; }
+.gtf-btn[disabled] { opacity: .55; cursor: default; }
+.gtf-menu { display: flex; flex-direction: column; gap: 2px; }
+.gtf-menu-item { display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left; font: inherit; padding: 8px 10px; border: 0; border-radius: 6px; background: transparent; color: var(--fgColor-default); cursor: pointer; }
+.gtf-menu-item:hover:not([disabled]) { background: var(--bgColor-neutral-muted); }
+.gtf-menu-item[disabled] { color: var(--fgColor-muted); cursor: default; }
+.gtf-menu-item-meta { color: var(--fgColor-muted); font-size: 12px; }
+.gtf-menu-sep { border: 0; border-top: 1px solid var(--borderColor-default); margin: 6px 0; }
+.gtf-field { display: block; margin-bottom: 8px; }
+.gtf-field-label { display: block; font-weight: 600; margin: 8px 0 4px; }
+.gtf-input { width: 100%; box-sizing: border-box; font: inherit; padding: 6px 10px; border: 1px solid var(--borderColor-default); border-radius: 6px; background: var(--bgColor-default); color: var(--fgColor-default); }
+.gtf-preview { margin: 4px 0 8px; font-size: 12px; color: var(--fgColor-muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.gtf-notice-attention { border-color: var(--fgColor-attention); margin: 8px 0; font-size: 13px; }
+.gtf-check { display: block; margin-top: 6px; font-size: 12px; }
+.gtf-picker { max-height: 240px; overflow: auto; border: 1px solid var(--borderColor-default); border-radius: 6px; margin-top: 6px; }
+.gtf-picker-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-top: 1px solid var(--borderColor-muted); cursor: pointer; }
+.gtf-picker-item:first-child { border-top: 0; }
+.gtf-picker-item:hover { background: var(--bgColor-neutral-muted); }
+.gtf-picker-item-disabled { color: var(--fgColor-muted); cursor: default; }
+.gtf-picker-name { flex: 1; }
+.gtf-muted { color: var(--fgColor-muted); font-size: 12px; }
+.gtf-menu-item-danger { color: var(--fgColor-danger); }
+.gtf-btn-danger { background: var(--bgColor-danger-muted); border-color: var(--fgColor-danger); color: var(--fgColor-danger); }
+.gtf-btn-danger:hover { background: var(--fgColor-danger); color: #fff; }
+.gtf-conflict-cell { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+
+/* filter chips coming from GitHub's own controls */
+.gtf-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 10px; font-size: 12px; }
+.gtf-chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border: 1px solid var(--borderColor-default); border-radius: 2em; background: var(--bgColor-muted); color: var(--fgColor-default); text-decoration: none; }
+.gtf-chip:hover { background: var(--bgColor-neutral-muted); }
+.gtf-chip-x { color: var(--fgColor-muted); font-weight: 600; }
+.gtf-lang-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.gtf-repo-lang { display: inline-flex; align-items: center; }
+.gtf-picker-tools { display: flex; gap: 12px; margin: 6px 0 0; }
+.gtf-link-btn { font: inherit; font-size: 12px; padding: 0; border: 0; background: none; color: var(--fgColor-accent); cursor: pointer; }
+.gtf-link-btn:hover { text-decoration: underline; }

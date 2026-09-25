@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="back" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f6feb"/><stop offset="1" stop-color="#1a5fd0"/>
+    </linearGradient>
+    <linearGradient id="front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#58a6ff"/><stop offset="1" stop-color="#3b8eea"/>
+    </linearGradient>
+  </defs>
+  <!-- folder back + tab -->
+  <path fill="url(#back)" d="M14 26h34a10 10 0 0 1 7.1 2.9L64 38h50a10 10 0 0 1 10 10v56a10 10 0 0 1-10 10H14A10 10 0 0 1 4 104V36a10 10 0 0 1 10-10z"/>
+  <!-- folder front -->
+  <path fill="url(#front)" d="M14 50h100a10 10 0 0 1 10 10v44a10 10 0 0 1-10 10H14A10 10 0 0 1 4 104V60a10 10 0 0 1 10-10z"/>
+  <!-- topic tag -->
+  <path fill="#ffffff" d="M46 66h26.3a10 10 0 0 1 7.1 2.9l18.6 18.6a5 5 0 0 1 0 7.1L84.6 108a5 5 0 0 1-7.1 0L58.9 89.4A10 10 0 0 1 56 82.3V76a10 10 0 0 1-10-10z" opacity="0"/>
+  <g fill="#ffffff">
+    <path d="M44 64h24.2a12 12 0 0 1 8.5 3.5l19.8 19.8a6 6 0 0 1 0 8.5l-15.7 15.7a6 6 0 0 1-8.5 0L52.5 91.7A12 12 0 0 1 49 83.2V69a5 5 0 0 1 5-5z" transform="translate(-2 -4)"/>
+  </g>
+  <circle cx="60" cy="74" r="5.5" fill="#1f6feb"/>
+</svg>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy Policy — Repository Groups for GitHub</title>
+  <link rel="icon" href="icon128.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header>
+    <img src="icon128.png" alt="">
+    <h1>Privacy Policy</h1>
+  </header>
+  <p class="lead">Repository Groups for GitHub (Chrome extension) · Effective 2026-09-23 (version 0.5.0 and later)</p>
+
+  <p>This policy describes what the Repository Groups for GitHub browser extension ("the extension") does with data.
+    The extension is developed and published by <strong>HASH7FF LLC (合同会社HASH7FF)</strong>, Tokyo, Japan
+    ("we"). Contact: <a href="mailto:support@hash7ff.com">support@hash7ff.com</a>.</p>
+
+  <h2>Summary</h2>
+  <ul>
+    <li>The extension <strong>only reads</strong> from GitHub (api.github.com and github.com). It never writes anything to GitHub.</li>
+    <li>Your groups are stored in your browser, in Chrome's storage for this extension. We operate no servers and receive no data from you.</li>
+    <li>Your GitHub credential is stored only in your browser and sent only to GitHub.</li>
+    <li>There are no analytics, no tracking, no advertising and no third-party services.</li>
+  </ul>
+
+  <h2>Data the extension handles</h2>
+  <ul>
+    <li><strong>GitHub credential.</strong> Either an access token and refresh token obtained when you use "Sign in with GitHub"
+      (GitHub's device authorization flow), or a personal access token you paste into the settings. It is stored in the
+      browser's extension storage (<code>chrome.storage.local</code>) on your device, with access restricted to the extension's
+      own pages and service worker. It is sent to api.github.com (and, for sign-in and token refresh, github.com) to authenticate
+      requests, and nowhere else. It is never exposed to web pages and never logged.</li>
+    <li><strong>Repository metadata.</strong> Names, ids, visibility, descriptions, languages, update times and star counts of the
+      repositories you own, or that belong to an organization whose repository page you open, and your GitHub login name, read from
+      the GitHub API. This is cached in the browser's session storage to avoid repeated requests and is discarded when the browser closes.</li>
+    <li><strong>Your groups.</strong> The names of the groups you create and the numeric ids of the repositories you put in them,
+      per GitHub account. They are stored in <code>chrome.storage.sync</code>. If you have turned on Chrome sync, Google stores and
+      syncs this data between your browsers as part of your Chrome sync data, under
+      <a href="https://policies.google.com/privacy">Google's privacy policy</a>; if Chrome sync is off, the data stays on this device.
+      We never receive it.</li>
+    <li><strong>Preferences.</strong> Which groups are collapsed and whether the grouped or original view is shown. Stored locally in the browser.</li>
+  </ul>
+  <p>The extension does not collect or store your name, email address, browsing history, repository contents or any data from web pages
+    other than the GitHub repositories page it operates on.</p>
+
+  <h2>What the extension does on GitHub</h2>
+  <p>It sends only these read-only requests to the GitHub REST API: <code>GET /user</code>, <code>GET /user/repos</code>,
+    <code>GET /orgs/{org}/repos</code> and <code>GET /user/installations</code>, plus GitHub's OAuth device-flow endpoints on github.com
+    for sign-in and token refresh. The <em>Repository Groups</em> GitHub App it uses asks for read-only repository metadata permission
+    only; it cannot read repository contents and cannot change anything.</p>
+  <p>Versions before 0.5.0 stored groups as repository topics on GitHub. Since 0.5.0 the extension no longer writes topics;
+    topics added by older versions are left as they are and can be removed on GitHub.</p>
+
+  <h2>Permissions</h2>
+  <ul>
+    <li><code>storage</code> — to keep your credential, your groups and your preferences in the browser.</li>
+    <li>Access to <code>github.com</code> — to show the grouped view on your repositories page, and for GitHub sign-in.</li>
+    <li>Access to <code>api.github.com</code> — to read your repository list.</li>
+  </ul>
+
+  <h2>Data retention and deletion</h2>
+  <p>All data lives in your browser (and, for groups, in your Chrome sync data if sync is on). You can remove it at any time:</p>
+  <ul>
+    <li>Settings → <em>Delete all groups…</em> removes your groups from this browser and from Chrome sync.</li>
+    <li>Settings → <em>Sign out</em> removes the credential.</li>
+    <li>Removing the extension removes what it stored in this browser.</li>
+    <li>On GitHub, Settings → Applications → <em>Installed GitHub Apps</em> → Repository Groups → Configure → Uninstall removes the app's
+      access to your repositories, and <em>Authorized GitHub Apps</em> → Revoke withdraws the sign-in.</li>
+  </ul>
+
+  <h2>Limited use</h2>
+  <p>Data obtained through the extension is used only to show the grouped repository view you asked for. It is not sold, not used for
+    advertising, not used to determine creditworthiness or for lending, and not transferred to anyone other than GitHub (to read your
+    repositories) and, for groups, Google (only if you use Chrome sync), or as required by law.</p>
+
+  <h2>Children</h2>
+  <p>The extension is not directed at children under 13 and does not knowingly process their data.</p>
+
+  <h2>Changes</h2>
+  <p>We will post any changes to this policy on this page and update the effective date above.</p>
+
+  <h2>Contact</h2>
+  <p>HASH7FF LLC (合同会社HASH7FF) · <a href="mailto:support@hash7ff.com">support@hash7ff.com</a> · <a href="https://hash7ff.com">hash7ff.com</a></p>
+
+  <h2 lang="ja">日本語（参考訳）</h2>
+  <div lang="ja">
+    <p>本拡張機能は GitHub（api.github.com および github.com）から情報を<strong>読むだけ</strong>で、GitHub には一切書き込みません。当社（合同会社HASH7FF）はサーバーを運用せず、利用者のデータを受け取りません。解析・トラッキング・広告・第三者サービスはありません。</p>
+    <p>グループ（作成したグループ名と、そこに入れたリポジトリの ID）はブラウザの拡張機能用ストレージ（<code>chrome.storage.sync</code>）に保存します。Chrome の同期を有効にしている場合は、Chrome の同期データの一部として Google が保存・同期します（Google のプライバシーポリシーに従います）。同期が無効ならこの端末の中だけに残ります。</p>
+    <p>GitHub の認証情報はブラウザ内の拡張機能ストレージにのみ保存され、GitHub への認証にのみ使われます。Web ページに渡さず、ログにも出力しません。リポジトリ情報はブラウザのセッションストレージに一時保存され、ブラウザ終了時に破棄されます。本拡張機能が使う GitHub App「Repository Groups」が求める権限は、リポジトリのメタデータの読み取りだけです。コードは読めず、何も変更できません。</p>
+    <p>0.5.0 より前のバージョンはグループを GitHub の Topic として保存していました。0.5.0 以降は Topic を書き込みません。以前のバージョンが付けた Topic はそのまま残るので、不要なら GitHub 上で削除できます。</p>
+    <p>設定画面の「Delete all groups…」でグループを（Chrome の同期先も含めて）削除、「Sign out」で認証情報を削除できます。GitHub の Settings → Applications で、アプリのアンインストール（Installed GitHub Apps）と承認の取り消し（Authorized GitHub Apps）ができます。お問い合わせ: support@hash7ff.com</p>
+  </div>
+
+  <footer>© 2026 <a href="https://hash7ff.com">HASH7FF LLC</a> · <a href="index.html">Home</a></footer>
+</main>
+</body>
+</html>

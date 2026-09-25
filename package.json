@@ -1,0 +1,22 @@
+{
+  "name": "github-repository-groups",
+  "version": "0.5.0",
+  "private": true,
+  "type": "module",
+  "description": "Show your GitHub repositories grouped into groups using topics.",
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "node build.mjs --watch",
+    "test": "node --test \"src/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm test && npm run build && bash scripts/check-token-isolation.sh",
+    "package": "npm run check && node scripts/package.mjs"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chrome": "^0.2.8",
+    "@types/node": "^26.4.1",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  }
+}

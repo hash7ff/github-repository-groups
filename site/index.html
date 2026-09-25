@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Repository Groups for GitHub</title>
+  <meta name="description" content="A Chrome extension that adds collapsible groups to your GitHub Repositories tab. Groups are kept in your browser and synced by Chrome; nothing is written to GitHub.">
+  <link rel="icon" href="icon128.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header>
+    <img src="icon128.png" alt="">
+    <h1>Repository Groups for GitHub</h1>
+  </header>
+  <p class="lead">Collapsible groups on your GitHub Repositories tab, GitLab-group style. Kept in your browser; nothing is written to GitHub.</p>
+
+  <p>
+    <a class="btn primary" href="#install">Install</a>
+    <a class="btn" href="https://github.com/hash7ff/github-repository-groups">Source on GitHub</a>
+  </p>
+
+  <h2>How it works</h2>
+  <div class="card"><pre class="demo">Repositories (Grouped | Original)
+
+▼ Platform  (3)            ← your groups, collapsible
+    api
+    infra
+    web
+▶ Mobile  (2)
+▼ Ungrouped  (1)           ← everything not in a group
+    meeting-notes</pre></div>
+  <ul>
+    <li><strong>Nothing is written to GitHub.</strong> The extension only reads your repository list, through GitHub's documented REST API.</li>
+    <li><strong>Groups live in your browser</strong>, in Chrome's sync storage: with Chrome sync on they follow you to your other computers, like bookmarks.</li>
+    <li><strong>Built not to break.</strong> The list comes from the API rather than from GitHub's page, so a GitHub redesign does not take your groups away.</li>
+    <li><strong>Always escapable.</strong> A <em>Grouped | Original</em> switch brings back GitHub's own list at any time, and GitHub's Find, Type, Language and Sort controls keep working.</li>
+  </ul>
+
+  <h2 id="install">Install</h2>
+  <p><a href="https://chromewebstore.google.com/detail/gmgodfjbahmhgnpmijnifcibicpdelop">Get it from the Chrome Web Store</a>.
+    Then open the extension's settings, click <em>Sign in with GitHub</em>, enter the short code on GitHub, and install the
+    <em>Repository Groups</em> app on your repositories. GitHub lets an app list private repositories only after you install it on them;
+    the app asks for read-only repository metadata and nothing else.</p>
+  <p>To stop using it: in the settings, <em>Delete all groups…</em> and <em>Sign out</em>; on GitHub, Settings → Applications → uninstall the app
+    and revoke its authorization; then remove the extension. Nothing is left behind.</p>
+  <p class="muted">Developers can build it from <a href="https://github.com/hash7ff/github-repository-groups">source</a> and load it unpacked.</p>
+
+  <h2>Privacy</h2>
+  <p>No analytics, no servers of our own. Your GitHub credential stays in your browser and is sent to GitHub only.
+    Read the <a href="privacy.html">privacy policy</a>.</p>
+
+  <footer>
+    © 2026 <a href="https://hash7ff.com">HASH7FF LLC</a> · <a href="privacy.html">Privacy policy</a> · <a href="mailto:support@hash7ff.com">support@hash7ff.com</a>
+  </footer>
+</main>
+</body>
+</html>
