@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { applyFilter, EMPTY_FILTER, isFiltering, matchesFilter, matchesQuery, parseFilterFromUrl, sortRepos, splitQuery, urlWithout } from "./filters.ts";
+import { applyFilter, EMPTY_FILTER, isFiltering, matchesFilter, matchesQuery, parseFilterFromUrl, sortGroups, sortRepos, splitQuery, urlWithout } from "./filters.ts";
 import { groupRepos } from "./grouping.ts";
 import { repo } from "./fixtures.ts";
 import type { OwnerGroups } from "./groupState.ts";
@@ -59,7 +59,37 @@ test("applyFilter drops groups with no matches but keeps them (even empty ones) 
   const filtered = applyFilter(g, { ...EMPTY_FILTER, q: "api" });
   assert.deepEqual(filtered.groups.map((p) => p.name), ["Platform"]);
   assert.deepEqual(filtered.ungrouped, []);
-  assert.deepEqual(applyFilter(g, EMPTY_FILTER).groups.map((p) => p.name), ["Devices", "Later", "Platform"], "every group survives when not filtering");
+  assert.deepEqual(applyFilter(g, EMPTY_FILTER).groups.map((p) => p.name), ["Devices", "Platform", "Later"], "every group survives when not filtering; the empty one last");
+});
+
+test("sortGroups: the group with the most recently updated repository first, empty groups last", () => {
+  const at = (day: string) => ({ pushedAt: `2026-09-${day}T00:00:00Z` });
+  const group = (name: string, repos: ReturnType<typeof repo>[]) => ({ id: `${name.toLowerCase()}000000`, name, repos });
+  const archive = group("Archive", [repo("old1", at("01")), repo("old2", at("02"))]);
+  const zeta = group("Zeta", [repo("quiet", at("03")), repo("busy", at("20"))]);
+  const mid = group("Mid", [repo("mid", at("10"))]);
+  const empty = group("Empty", []);
+  const names = (gs: { name: string }[]) => gs.map((g) => g.name);
+  assert.deepEqual(names(sortGroups([archive, empty, mid, zeta], "")), ["Zeta", "Mid", "Archive", "Empty"], "Zeta's newest repository wins despite its name");
+  assert.deepEqual(names(sortGroups([archive, empty, mid, zeta], "updated")), ["Zeta", "Mid", "Archive", "Empty"], "GitHub's 'Last updated' means the same");
+  assert.deepEqual(names(sortGroups([zeta, mid, archive, empty], "name")), ["Archive", "Empty", "Mid", "Zeta"], "GitHub's 'Name' orders groups by name");
+  const twin = group("Alpha", [repo("twin", at("20"))]);
+  assert.deepEqual(names(sortGroups([zeta, twin], "")), ["Alpha", "Zeta"], "a tie falls back to the group name");
+  const starred = group("Stars", [repo("popular", { ...at("01"), stargazers: 120 })]);
+  assert.deepEqual(names(sortGroups([zeta, starred, empty], "stargazers")), ["Stars", "Zeta", "Empty"], "'Stars' orders by each group's most-starred repository");
+});
+
+test("while filtering, a group is placed by the repositories still shown", () => {
+  const recentDocs = repo("docs-site", { pushedAt: "2026-09-20T00:00:00Z" });
+  const olderApi = repo("api", { pushedAt: "2026-09-02T00:00:00Z" });
+  const newerApi = repo("api-gateway", { pushedAt: "2026-09-10T00:00:00Z" });
+  const state: OwnerGroups = {
+    groups: [{ id: "webgroup01", name: "Web" }, { id: "backend001", name: "Backend" }],
+    assign: { [String(recentDocs.id)]: "webgroup01", [String(olderApi.id)]: "webgroup01", [String(newerApi.id)]: "backend001" },
+  };
+  const g = groupRepos([recentDocs, olderApi, newerApi], state);
+  assert.deepEqual(applyFilter(g, EMPTY_FILTER).groups.map((p) => p.name), ["Web", "Backend"]);
+  assert.deepEqual(applyFilter(g, { ...EMPTY_FILTER, q: "api" }).groups.map((p) => p.name), ["Backend", "Web"], "Web's newest match is the older api");
 });
 
 test("isFiltering ignores sort (ordering is not filtering)", () => {

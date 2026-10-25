@@ -1,7 +1,7 @@
 // GitHub's own controls above our view (Find a repository / Type / Language / Sort) put their state in the URL.
 // We read it from there instead of touching GitHub's DOM, so those controls keep working while the grouped view is shown.
 import type { RepoSummary } from "./types.ts";
-import type { Grouped } from "./grouping.ts";
+import type { Grouped, RepoGroup } from "./grouping.ts";
 import { byName } from "./grouping.ts";
 
 /** Values observed on the profile Repositories tab (verified 2026-09-04). */
@@ -102,15 +102,28 @@ export function sortRepos(repos: readonly RepoSummary[], sort: RepoSort): RepoSu
   return list.sort(byName);
 }
 
+/**
+ * Group order. By default (and with GitHub's "Last updated") the group holding the most recently updated repository
+ * comes first, so a group of busy repositories is never pushed down by its alphabetically later name. "Name" orders
+ * by group name; "Stars" by each group's most-starred repository. Only the repositories shown count, and groups
+ * with none (empty, or nothing left by a filter) go last, by name.
+ */
+export function sortGroups(groups: readonly RepoGroup[], sort: RepoSort): RepoGroup[] {
+  if (sort === "name") return [...groups].sort(byName);
+  const keyOf = (g: RepoGroup): number => Math.max(...g.repos.map(sort === "stargazers" ? (r) => r.stargazers : timeOf));
+  return [...groups].sort((a, b) => {
+    if (a.repos.length === 0 || b.repos.length === 0) return Number(a.repos.length === 0) - Number(b.repos.length === 0) || byName(a, b);
+    return keyOf(b) - keyOf(a) || byName(a, b);
+  });
+}
+
 export function isFiltering(filter: GitHubFilter): boolean {
   return filter.q.trim() !== "" || filter.language !== "" || filter.type !== "";
 }
 
-/** Apply text/type/language filtering and repository ordering. Groups with nothing left are dropped. */
+/** Apply text/type/language filtering, then repository and group ordering. Groups with nothing left are dropped. */
 export function applyFilter(grouped: Grouped, filter: GitHubFilter): Grouped {
   const keep = (repos: readonly RepoSummary[]) => sortRepos(repos.filter((r) => matchesFilter(r, filter)), filter.sort);
-  return {
-    groups: grouped.groups.map((p) => ({ ...p, repos: keep(p.repos) })).filter((p) => p.repos.length > 0 || !isFiltering(filter)),
-    ungrouped: keep(grouped.ungrouped),
-  };
+  const groups = grouped.groups.map((p) => ({ ...p, repos: keep(p.repos) })).filter((p) => p.repos.length > 0 || !isFiltering(filter));
+  return { groups: sortGroups(groups, filter.sort), ungrouped: keep(grouped.ungrouped) };
 }
