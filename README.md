@@ -53,8 +53,10 @@ To stop using it, nothing is left behind after these four steps:
 - **Grouped view** on your Repositories tab, with a `Grouped | Original` switch that brings GitHub's own list back at
   any time. The original list is also left in place whenever the extension has an error.
 - **Collapse and expand** groups; the state is remembered per browser. Repositories in no group appear under **Ungrouped**.
-- **Groups in order of activity**: the group holding the most recently updated repository comes first. Choosing
-  *Name* or *Stars* in GitHub's Sort menu orders the groups that way instead.
+- **In order of activity**: repositories newest first, as in GitHub's own list, and groups too: the group holding
+  the most recently updated repository comes first. Choosing *Name* or *Stars* in GitHub's Sort menu orders both
+  that way instead.
+- **The same details as GitHub's list**: language, stars, forks and when each repository was last updated.
 - **New group** (empty, or with repositories picked from a list), **Move to…** on every repository,
   **Add repositories…** in bulk, **Rename** (renaming onto an existing name merges the two), **Delete**
   (the repositories go back to Ungrouped; nothing is deleted on GitHub).

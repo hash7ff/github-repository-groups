@@ -24,6 +24,7 @@ export function repo(name: string, extra: Partial<RepoSummary> = {}): RepoSummar
     mirror: false,
     template: false,
     stargazers: 0,
+    forks: 0,
     ...extra,
   };
 }

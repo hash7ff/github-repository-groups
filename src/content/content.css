@@ -101,6 +101,9 @@ a.gtf-btn { text-decoration: none; display: inline-block; }
 .gtf-chip-x { color: var(--fgColor-muted); font-weight: 600; }
 .gtf-lang-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
 .gtf-repo-lang { display: inline-flex; align-items: center; }
+.gtf-repo-stat { display: inline-flex; align-items: center; gap: 4px; color: inherit; text-decoration: none; }
+.gtf-repo-stat:hover { color: var(--fgColor-accent); }
+.gtf-octicon { fill: currentColor; flex: none; }
 .gtf-picker-tools { display: flex; gap: 12px; margin: 6px 0 0; }
 .gtf-link-btn { font: inherit; font-size: 12px; padding: 0; border: 0; background: none; color: var(--fgColor-accent); cursor: pointer; }
 .gtf-link-btn:hover { text-decoration: underline; }

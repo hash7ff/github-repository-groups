@@ -16,6 +16,7 @@ export type RepoSummary = {
   mirror: boolean;
   template: boolean;
   stargazers: number;
+  forks: number;
 };
 
 export type ApiErrorKind =

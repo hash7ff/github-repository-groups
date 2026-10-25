@@ -40,12 +40,14 @@ test("type and language filters follow GitHub's semantics", () => {
   assert.equal(matchesFilter(pub, f({ language: "python" })), false);
 });
 
-test("sortRepos: default alphabetical, GitHub's choice wins when set", () => {
+test("sortRepos: newest first by default, like GitHub; Name and Stars when GitHub's Sort says so", () => {
   const a = repo("alpha", { pushedAt: "2026-01-01T00:00:00Z", stargazers: 1 });
   const b = repo("beta", { pushedAt: "2026-09-01T00:00:00Z", stargazers: 9 });
-  assert.deepEqual(sortRepos([b, a], "").map((r) => r.name), ["alpha", "beta"]);
-  assert.deepEqual(sortRepos([a, b], "updated").map((r) => r.name), ["beta", "alpha"]);
-  assert.deepEqual(sortRepos([a, b], "stargazers").map((r) => r.name), ["beta", "alpha"]);
+  const c = repo("gamma", { pushedAt: "2026-09-01T00:00:00Z", stargazers: 0 });
+  assert.deepEqual(sortRepos([a, c, b], "").map((r) => r.name), ["beta", "gamma", "alpha"], "a tie falls back to the name");
+  assert.deepEqual(sortRepos([a, c, b], "updated").map((r) => r.name), ["beta", "gamma", "alpha"]);
+  assert.deepEqual(sortRepos([c, b, a], "name").map((r) => r.name), ["alpha", "beta", "gamma"]);
+  assert.deepEqual(sortRepos([a, c, b], "stargazers").map((r) => r.name), ["beta", "alpha", "gamma"]);
 });
 
 test("applyFilter drops groups with no matches but keeps them (even empty ones) when nothing is filtered", () => {

@@ -64,6 +64,7 @@ export function toRepoSummary(raw: unknown): RepoSummary | null {
     mirror: typeof r["mirror_url"] === "string" && r["mirror_url"].length > 0,
     template: r["is_template"] === true,
     stargazers: typeof r["stargazers_count"] === "number" ? r["stargazers_count"] : 0,
+    forks: typeof r["forks_count"] === "number" ? r["forks_count"] : 0,
   };
 }
 

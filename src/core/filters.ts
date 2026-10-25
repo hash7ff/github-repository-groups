@@ -94,12 +94,12 @@ export function matchesFilter(repo: RepoSummary, filter: GitHubFilter): boolean 
 
 const timeOf = (r: RepoSummary): number => Date.parse(r.pushedAt ?? r.updatedAt) || 0;
 
-/** Repository order inside a group. Empty keeps our alphabetical default; GitHub's own choice wins when set. */
+/** Repository order inside a group: newest first, like GitHub's own list, unless GitHub's Sort says Name or Stars. */
 export function sortRepos(repos: readonly RepoSummary[], sort: RepoSort): RepoSummary[] {
   const list = [...repos];
-  if (sort === "updated") return list.sort((a, b) => timeOf(b) - timeOf(a));
+  if (sort === "name") return list.sort(byName);
   if (sort === "stargazers") return list.sort((a, b) => b.stargazers - a.stargazers || byName(a, b));
-  return list.sort(byName);
+  return list.sort((a, b) => timeOf(b) - timeOf(a) || byName(a, b));
 }
 
 /**

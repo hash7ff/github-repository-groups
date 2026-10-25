@@ -103,7 +103,10 @@ test("toRepoSummary tolerates missing optional fields and rejects garbage", () =
   assert.equal(r?.private, false);
   assert.equal(r?.description, null);
   assert.equal(r?.stargazers, 0);
+  assert.equal(r?.forks, 0);
   assert.equal(r?.mirror, false);
+  const counted = toRepoSummary({ ...bare, id: 43, stargazers_count: 128, forks_count: 34 });
+  assert.deepEqual([counted?.stargazers, counted?.forks], [128, 34]);
 });
 
 test("listInstallations exposes the numeric app id (stable across renames) alongside the slug", async () => {
