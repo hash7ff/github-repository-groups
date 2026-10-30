@@ -9,7 +9,7 @@ import { groupOf, groupRepos, type Grouped } from "../core/grouping.ts";
 import { checkGroupName, newGroupId, type GroupOp, type OwnerGroups } from "../core/groupState.ts";
 import { applyFilter, EMPTY_FILTER, isFiltering, parseFilterFromUrl, type GitHubFilter } from "../core/filters.ts";
 import { relativeTime } from "../core/relativeTime.ts";
-import { DEFAULT_PREFS, type AuthStatus, type Prefs, type ReposList, type ViewMode } from "../core/messages.ts";
+import { DEFAULT_PREFS, type AuthStatus, type Prefs, type RepoAccess, type ReposList, type ViewMode } from "../core/messages.ts";
 import type { ApiErrorInfo } from "../core/types.ts";
 import { buildToolbar, describeError, renderError, renderFilterChips, renderGroups, renderLoading, renderUnconfigured, setSegmentedMode, type ViewActions } from "./ui/view.ts";
 import { openMoveDialog } from "./ui/moveDialog.ts";
@@ -46,6 +46,8 @@ class GroupedView {
   private anchor: HTMLElement;
   private readonly actions: ViewActions;
   readonly url = location.href;
+  /** Nothing is inserted into the page until the service worker confirms this list is one the user can group. */
+  shown = false;
 
   constructor(ctx: PageContext, adapter: PageAdapter, anchor: HTMLElement) {
     this.ctx = ctx;
@@ -80,16 +82,24 @@ class GroupedView {
   }
 
   async init(): Promise<void> {
-    const prefs = await send<Prefs>({ type: "prefs.get" });
+    const [prefs, access] = await Promise.all([
+      send<Prefs>({ type: "prefs.get" }),
+      send<RepoAccess>({ type: "repos.access", owner: this.ctx.owner, kind: this.ctx.kind }),
+    ]);
     if (this.disposed) return;
+    // Someone else's repositories: leave GitHub's page untouched. If the check itself failed, show the view so
+    // load() can say why.
+    if (access.ok && !access.data.show) return;
     if (prefs.ok) this.prefs = prefs.data;
-    this.applyMode();
+    this.shown = true;
+    this.attach(this.adapter.anchor() ?? this.anchor);
     await this.load(false);
   }
 
   /** Put our root in front of GitHub's list and apply the current mode. Safe to call on every render. */
   attach(anchor: HTMLElement): void {
     this.anchor = anchor;
+    if (!this.shown) return;
     if (anchor.previousElementSibling !== this.root) anchor.before(this.root);
     this.applyMode();
   }
@@ -316,8 +326,9 @@ function mount(): void {
   }
   ensureObserver(picked.adapter);
 
-  // Same page, view already built: just make sure it is still in front of the (possibly re-created) list.
-  if (activeView !== null && activeView.url === location.href && activeView.root.isConnected) {
+  // Same page, view already built (or not shown on this list): just make sure it is still in front of the
+  // (possibly re-created) list. A view that is not shown is kept, so page updates do not repeat the check.
+  if (activeView !== null && activeView.url === location.href && (activeView.root.isConnected || !activeView.shown)) {
     activeView.attach(anchor);
     return;
   }

@@ -21,6 +21,7 @@ export type Request =
   | { type: "auth.clear" }
   | { type: "options.open" }
   | { type: "repos.list"; owner: string; force?: boolean }
+  | { type: "repos.access"; owner: string; kind: "user" | "org" }
   | { type: "prefs.get" }
   | { type: "prefs.set"; patch: Partial<Prefs> }
   | { type: "auth.deviceStart" }
@@ -43,6 +44,9 @@ export type AuthStatus = { configured: boolean; login: string | null; kind: Auth
 export type DeviceStart = { flowId: string; userCode: string; verificationUri: string; expiresIn: number; interval: number };
 export type DevicePoll = { done: false; interval: number } | { done: true; login: string };
 export type InstallationsStatus = { installed: boolean; count: number; repositorySelection: string | null; installUrl: string };
+
+/** Whether the grouped view belongs on this owner's list at all. */
+export type RepoAccess = { show: boolean };
 
 export type ReposList = {
   owner: string;

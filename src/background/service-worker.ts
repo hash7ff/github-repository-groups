@@ -6,7 +6,7 @@ import { createTokenManager } from "./token-manager.ts";
 import * as storage from "./storage.ts";
 import { toAuthRecord } from "../core/auth.ts";
 import { GITHUB_APP_CLIENT_ID, GITHUB_APP_ID, GITHUB_APP_INSTALL_URL, GITHUB_APP_NAME } from "../core/config.ts";
-import { fail, ok, type AuthStatus, type DevicePoll, type DeviceStart, type GroupsUsage, type ImportSummary, type InstallationsStatus, type ReposList, type Request, type Response as MsgResponse } from "../core/messages.ts";
+import { fail, ok, type AuthStatus, type DevicePoll, type DeviceStart, type GroupsUsage, type ImportSummary, type InstallationsStatus, type RepoAccess, type ReposList, type Request, type Response as MsgResponse } from "../core/messages.ts";
 import { applyOps, buildExport, parseImport, parseOps, type OwnerGroups } from "../core/groupState.ts";
 import { SYNC_TOTAL_BYTES } from "../core/syncLayout.ts";
 import type { ApiErrorInfo } from "../core/types.ts";
@@ -141,6 +141,17 @@ async function resolveTarget(owner: string): Promise<{ kind: "user" | "org" } | 
   };
 }
 
+/**
+ * Whether the content script adds anything to `owner`'s list. Before sign-in we cannot tell whose list it is, so the
+ * sign-in prompt shows everywhere; after that, only the user's own list and organizations we can read get the view.
+ * Anyone else's list is left exactly as GitHub shows it.
+ */
+async function repoAccess(owner: string, kind: "user" | "org"): Promise<MsgResponse<RepoAccess>> {
+  if (!(await storage.getAuth())) return ok({ show: true });
+  if (kind === "user") return ok({ show: owner.toLowerCase() === (await resolveLogin()).toLowerCase() });
+  return ok({ show: !("message" in (await resolveTarget(owner))) });
+}
+
 async function installations(): Promise<MsgResponse<InstallationsStatus>> {
   const auth = await storage.getAuth();
   if (!auth) return fail({ kind: "unauthorized", status: 0, message: "Not signed in." });
@@ -270,6 +281,9 @@ async function handle(req: Request, from: SenderKind): Promise<MsgResponse<unkno
     case "repos.list":
       if (!isName(req.owner)) return fail({ kind: "validation", status: 0, message: "Invalid owner." });
       return listRepos(req.owner, req.force === true);
+    case "repos.access":
+      if (!isName(req.owner) || (req.kind !== "user" && req.kind !== "org")) return fail({ kind: "validation", status: 0, message: "Invalid owner." });
+      return repoAccess(req.owner, req.kind);
     case "groups.get":
       if (!isName(req.owner)) return fail({ kind: "validation", status: 0, message: "Invalid owner." });
       return ok(await storage.getOwnerGroups(req.owner));

@@ -63,6 +63,8 @@ To stop using it, nothing is left behind after these four steps:
 - **GitHub's own controls keep working**: Find, Type, Language and Sort above the list narrow and order the grouped
   view too.
 - **Organizations**: the same view on `github.com/orgs/<org>/repositories` for organizations where the app is installed.
+- **Only your own lists change**: other people's repositories, and organizations without the app, look exactly as
+  GitHub shows them.
 - **Export / import** your groups as a JSON file, for backups or for moving to a browser without Chrome sync.
 - A fine-grained personal access token (Metadata: Read-only) works as an advanced alternative to signing in.
 
@@ -81,8 +83,9 @@ To stop using it, nothing is left behind after these four steps:
 - Chrome sync gives an extension about 100 KB. That is room for several thousand grouped repositories; the settings
   page shows how much is used.
 - Groups follow you through Chrome sync only. Another browser needs an export and an import.
-- For an organization, the app must be installed on that organization. If you are not an owner, GitHub turns the
-  install button into a request that an owner approves.
+- For an organization, the app must be installed on that organization
+  (https://github.com/apps/repository-groups/installations/new); until then its list stays as GitHub shows it. If you
+  are not an owner, GitHub turns the install button into a request that an owner approves.
 
 ## Build from source
 
