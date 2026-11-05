@@ -7,8 +7,6 @@
 .gtf-seg-btn { font: inherit; font-size: 12px; font-weight: 500; padding: 4px 10px; border: 0; background: var(--bgColor-default); color: var(--fgColor-muted); cursor: pointer; }
 .gtf-seg-btn + .gtf-seg-btn { border-left: 1px solid var(--borderColor-default); }
 .gtf-seg-btn[aria-pressed="true"] { background: var(--bgColor-neutral-muted); color: var(--fgColor-default); font-weight: 600; }
-.gtf-search { flex: 1 1 200px; min-width: 160px; font: inherit; font-size: 14px; padding: 4px 10px; border: 1px solid var(--borderColor-default); border-radius: 6px; background: var(--bgColor-default); color: var(--fgColor-default); }
-.gtf-search:focus { outline: 2px solid var(--fgColor-accent); outline-offset: -1px; }
 .gtf-toolbar-status { color: var(--fgColor-muted); font-size: 12px; margin-left: auto; }
 .gtf-btn { font: inherit; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--borderColor-default); background: var(--button-default-bgColor-rest, var(--bgColor-default)); color: var(--fgColor-default); cursor: pointer; }
 .gtf-btn:hover { background: var(--bgColor-neutral-muted); }

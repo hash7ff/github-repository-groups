@@ -11,7 +11,6 @@ import { urlWithout, type GitHubFilter } from "../../core/filters.ts";
 export type ViewActions = {
   toggleGroup(key: string): void;
   setMode(mode: "grouped" | "original"): void;
-  setQuery(query: string): void;
   refresh(): void;
   retry(): void;
   openSettings(): void;
@@ -27,31 +26,23 @@ export function describeError(error: ApiErrorInfo): string {
   return text;
 }
 
-export function buildToolbar(actions: ViewActions): { toolbar: HTMLElement; status: HTMLElement; search: HTMLInputElement; seg: HTMLElement } {
+export function buildToolbar(actions: ViewActions): { toolbar: HTMLElement; status: HTMLElement; seg: HTMLElement } {
   const seg = h(
     "div",
     { className: "gtf-segmented", ariaLabel: "View" },
     h("button", { className: "gtf-seg-btn", type: "button", dataset: { mode: "grouped" }, onClick: () => actions.setMode("grouped") }, "Grouped"),
     h("button", { className: "gtf-seg-btn", type: "button", dataset: { mode: "original" }, onClick: () => actions.setMode("original") }, "Original"),
   );
-  const search = h("input", {
-    className: "gtf-search",
-    type: "search",
-    placeholder: "Search repositories…",
-    ariaLabel: "Search repositories",
-    onInput: (e) => actions.setQuery((e.target as HTMLInputElement).value),
-  });
   const status = h("span", { className: "gtf-toolbar-status" });
   const toolbar = h(
     "div",
     { className: "gtf-toolbar" },
     seg,
-    search,
     h("button", { className: "gtf-btn", type: "button", onClick: () => actions.newGroup() }, "New group"),
     h("button", { className: "gtf-btn", type: "button", title: "Reload repositories from GitHub", onClick: () => actions.refresh() }, "Refresh"),
     status,
   );
-  return { toolbar, status, search, seg };
+  return { toolbar, status, seg };
 }
 
 /** Shows which of GitHub's own controls are narrowing the grouped view, each removable through GitHub's own URL. */

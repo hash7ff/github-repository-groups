@@ -1,6 +1,6 @@
 {
   "name": "github-repository-groups",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "private": true,
   "type": "module",
   "description": "Show your GitHub repositories grouped into groups using topics.",

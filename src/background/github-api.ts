@@ -109,7 +109,10 @@ export function createGitHubApi(deps: { getToken: () => Promise<string | null>; 
       Authorization: `Bearer ${token}`,
       "X-GitHub-Api-Version": "2022-11-28",
     };
-    const init: RequestInit = { method, headers };
+    // GitHub marks its answers fresh for 60 s, so Chrome would otherwise reuse its own copy and a repository created a
+    // moment ago would be missing. "no-cache" makes Chrome ask GitHub every time, sending the stored ETag; an unchanged
+    // answer comes back as 304, which GitHub does not count against the rate limit.
+    const init: RequestInit = { method, headers, cache: "no-cache" };
     let res: Response;
     try {
       res = await fetchImpl(url, init);

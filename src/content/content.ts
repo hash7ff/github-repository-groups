@@ -17,6 +17,8 @@ import { openAddRepositoriesDialog, openNewGroupDialog } from "./ui/pickerDialog
 import { openDeleteDialog, openGroupMenu, openRenameDialog } from "./ui/groupDialogs.ts";
 
 const ROOT_ID = "gtf-root";
+/** GitHub's search box changes the URL on every pause in typing; a list this fresh is not re-checked for each of those. */
+const RECHECK_AFTER_MS = 10_000;
 
 type Phase =
   | { kind: "loading" }
@@ -38,7 +40,6 @@ class GroupedView {
   private loadSeq = 0;
   private prefs: Prefs = DEFAULT_PREFS;
   private phase: Phase = { kind: "loading" };
-  private query = "";
   private disposed = false;
   private readonly ctx: PageContext;
   private readonly adapter: PageAdapter;
@@ -56,10 +57,6 @@ class GroupedView {
     const actions: ViewActions = {
       toggleGroup: (key) => this.toggleGroup(key),
       setMode: (mode) => this.setMode(mode),
-      setQuery: (q) => {
-        this.query = q;
-        this.renderBody();
-      },
       refresh: () => void this.load(true),
       retry: () => void this.load(true),
       openSettings: () => void send({ type: "options.open" }),
@@ -67,12 +64,10 @@ class GroupedView {
       newGroup: () => this.openNewGroup([]),
       groupMenu: (groupId) => this.openGroupMenu(groupId),
     };
-    const { toolbar, status, seg, search } = buildToolbar(actions);
+    const { toolbar, status, seg } = buildToolbar(actions);
     this.status = status;
     this.seg = seg;
     this.urlFilter = parseFilterFromUrl(location.href);
-    this.query = this.urlFilter.q;
-    search.value = this.urlFilter.q; // GitHub's search box submitted this; keep ours in sync
     this.chips = h("div", { className: "gtf-chips", hidden: true });
     this.body = h("div", { className: "gtf-body" });
     this.flash = h("div", { className: "gtf-flash", hidden: true });
@@ -136,6 +131,20 @@ class GroupedView {
     else if (!groups.ok) this.phase = { kind: "error", error: groups.error };
     else this.phase = { kind: "ready", data: list.data, state: groups.data, grouped: groupRepos(list.data.repos, groups.data) };
     this.render();
+    if (this.phase.kind === "ready" && this.phase.data.fromCache && Date.now() - this.phase.data.fetchedAt > RECHECK_AFTER_MS) void this.recheck(seq);
+  }
+
+  /**
+   * The list just shown is the service worker's short-lived copy. Ask GitHub again in the background and swap the
+   * new list in if anything changed, so a repository created a moment ago appears without pressing Refresh.
+   */
+  private async recheck(seq: number): Promise<void> {
+    const list = await send<ReposList>({ type: "repos.list", owner: this.ctx.owner, force: true });
+    if (this.disposed || seq !== this.loadSeq || this.phase.kind !== "ready" || !list.ok) return; // on failure keep what is shown
+    const changed = JSON.stringify(list.data.repos) !== JSON.stringify(this.phase.data.repos);
+    this.phase = { ...this.phase, data: list.data, grouped: changed ? groupRepos(list.data.repos, this.phase.state) : this.phase.grouped };
+    if (changed) this.render();
+    else this.renderStatus();
   }
 
   // ---- group changes: stored in this browser by the service worker; nothing is written to GitHub ----
@@ -304,9 +313,7 @@ class GroupedView {
     if (p.kind === "loading") return renderLoading(this.body);
     if (p.kind === "unconfigured") return renderUnconfigured(this.body, this.actions);
     if (p.kind === "error") return renderError(this.body, p.error, this.actions);
-    const filter: GitHubFilter = { ...this.urlFilter, q: this.query };
-    const searching = isFiltering(filter);
-    renderGroups(this.body, applyFilter(p.grouped, filter), this.prefs.collapsed, searching, this.actions);
+    renderGroups(this.body, applyFilter(p.grouped, this.urlFilter), this.prefs.collapsed, isFiltering(this.urlFilter), this.actions);
   }
 }
 

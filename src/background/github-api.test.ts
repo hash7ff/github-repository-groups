@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createGitHubApi, GitHubApiError, parseLinkNext, toRepoSummary, type FetchLike } from "./github-api.ts";
 
-type Call = { url: string; method: string; headers: Record<string, string>; body: string | undefined };
+type Call = { url: string; method: string; headers: Record<string, string>; body: string | undefined; cache: RequestCache | undefined };
 
 function mockFetch(handler: (call: Call) => Response): { fetchImpl: FetchLike; calls: Call[] } {
   const calls: Call[] = [];
@@ -12,6 +12,7 @@ function mockFetch(handler: (call: Call) => Response): { fetchImpl: FetchLike; c
       method: init?.method ?? "GET",
       headers: (init?.headers as Record<string, string>) ?? {},
       body: typeof init?.body === "string" ? init.body : undefined,
+      cache: init?.cache,
     };
     calls.push(call);
     return handler(call);
@@ -28,7 +29,7 @@ test("parseLinkNext extracts rel=next only", () => {
   assert.equal(parseLinkNext(null), null);
 });
 
-test("requests carry Bearer token, Accept and API version headers; token never appears in URL", async () => {
+test("requests carry Bearer token, Accept and API version headers, always revalidate; token never appears in URL", async () => {
   const { fetchImpl, calls } = mockFetch(() => json({ login: "mutsuyuki" }));
   const who = await api(fetchImpl).whoami();
   assert.deepEqual(who, { login: "mutsuyuki" });
@@ -36,6 +37,7 @@ test("requests carry Bearer token, Accept and API version headers; token never a
   assert.equal(calls[0]?.headers["Authorization"], "Bearer tok_test");
   assert.equal(calls[0]?.headers["Accept"], "application/vnd.github+json");
   assert.equal(calls[0]?.headers["X-GitHub-Api-Version"], "2022-11-28");
+  assert.equal(calls[0]?.cache, "no-cache"); // never Chrome's 60-second copy: a just-created repository must show up
   assert.ok(!calls[0]?.url.includes("tok_test"));
 });
 

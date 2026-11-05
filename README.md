@@ -56,6 +56,8 @@ To stop using it, nothing is left behind after these four steps:
 - **In order of activity**: repositories newest first, as in GitHub's own list, and groups too: the group holding
   the most recently updated repository comes first. Choosing *Name* or *Stars* in GitHub's Sort menu orders both
   that way instead.
+- **Up to date**: the list appears at once from a short-lived copy and is checked against GitHub in the background,
+  so a repository you just created shows up without pressing *Refresh*.
 - **The same details as GitHub's list**: language, stars, forks and when each repository was last updated.
 - **New group** (empty, or with repositories picked from a list), **Move to…** on every repository,
   **Add repositories…** in bulk, **Rename** (renaming onto an existing name merges the two), **Delete**
